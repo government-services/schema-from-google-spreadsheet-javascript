@@ -35,14 +35,25 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
+          
+        <script type="text/javascript">
+        
+            function runGenerator()
+                {
+                url = document.getElementById("googleurl").value;
+                alert(url);
+                generateJSON(url);  
+                }
+        
+        </script>
         
         <h1>Government Services Schema</h1>
         <p>This is a basic tool that pulls from a Google Spreadsheet that is setup as a government services template, allowing the editing of groups of services to renders as JSON output.</p>
         <form action="index.php" method="get">
-            <strong>Google Doc ID:</strong> <input type="text" name="sk" value="<?php echo $spreadsheetkey; ?>" size="75" />
-            <input type="submit" name="changekey" value="Change Key" />
+            <strong>Google Doc ID:</strong> <input type="text" name="googleurl" id="googleurl" value="https://docs.google.com/spreadsheet/pub?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE&output=html" size="75" />
+            <input type="submit" name="changekey" value="Run" />
         </form>
-        <p>By default this tool uses <a href="https://docs.google.com/spreadsheet/ccc?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE&usp=sharing" target="_blank">this spreadsheet</a>, but you can copy the template and populate with different data, publish publicy, and use the key to generate new JSON output.</p>
+        <p>By default this tool uses <a href="https://docs.google.com/spreadsheet/ccc?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE#gid=0" target="_blank">this spreadsheet</a>, but you can copy the template and populate with different data, publish publicy, and use the key to generate new JSON output.</p>
        
         <p><strong>Dependencies:</strong></p>
         <ul>
@@ -53,136 +64,142 @@
         <p>This project is meant to provide an easily forkable project that any federal, state, county or city government can use to generate service listings in a Google Doc and then output as JSON, just by using a Github repo and no server side code.</p>
         
         <script type="text/javascript">
-                    
-              var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE&output=html';
         
-              $(document).ready( function() {
-                Tabletop.init( { key: public_spreadsheet_url,
-                                 callback: showInfo,
-                                 wanted: [ "Services", "Service Locations" ],
-                                 debug: true } )
-              })
-                
-              function showInfo(data, tabletop) {
-                $("#table_info").text("We found the tables " + tabletop.model_names.join(", "));
-        
-                $.each( tabletop.sheets(), function(i, sheet) {
-                  $("#table_info").append("<p>" + sheet.name + " has " + sheet.column_names.join(", ") + "</p>");
-                });
-                
-                $.each( tabletop.sheets("Services").all(), function(i, service) {
+            function generateJSON(url)
+                {
                     
-                    $servicename = service.servicename;
-                    $uniqueid = service.uniqueid;
-                    $description = service.description;
-                    $url = service.url;
-                    $image = service.image;
-                    $alternatenames = service.alternatenames;
-                    $servicearea = service.servicearea;
-                    $providername = service.providername;
-                    $providerlogo = service.providerlogo;
-                    $providerurl = service.providerurl;
-                    $operator = service.operator;
-                    $servicetype = service.servicetype;
-                    $servicetypetaxonomyused = service.servicetypetaxonomyused;
-                    $produces = service.produces;
-                    $audience = service.audience;
-                    $availablelanguages = service.availablelanguages;
-                    $serviceurl = service.serviceurl;
-                    $servicephone = service.servicephone;   
-                    
-                    // Let's buil the Schema
-                    $Schema = {};
-                    $Schema['@context'] = 'http://schema.org/';
-                    $Schema['@type'] = 'GovernmentService';
-                    $Schema['@id'] = $uniqueid;
-                    $Schema['name'] = $servicename;                 
-                    
-                    // Audience
-                    $audienceArray = $audience.split(";");
-                    $Audience = {};
-                    $Audience["@type"] = "CivicAudience";
-                    $Audience['audienceType'] = new Array();
-                    $.each($audienceArray, function( key, value ){
-                        $Audience['audienceType'].push(value);  
-                    })
-                                
-                    $Schema['audience'] = $Audience;        
-                
-                    $Schema['Description'] = $description;
-                
-                    $Provider = {};
-                    $Provider["@type"] = "GovernmentOrganization";
-                    $Provider["name"] = $providername;
-                    $Provider["url"] = $providerurl;
-                    $Provider["logo"] = $providerlogo;
-                    
-                    $Schema['provider'] = $Provider;        
-                    
-                    $ServiceArea = {};
-                    $ServiceArea["@type"] = "Country";
-                    $ServiceArea["name"] = "ocd-division/country:us";   
-                                    
-                    $Schema['serviceArea'] = $ServiceArea;          
-        
-                    SServiceChannel = {};
-                    SServiceChannel["@type"] = "ServiceChannel";
-                    SServiceChannel["servicePhone"] = $servicephone;    
-                    SServiceChannel["serviceLocation"] = new Array();
-        
-                    $.each(tabletop.sheets("Service Locations").all(), function(i, servicelocations) {
-                        
-                        $servicelocation_name = servicelocations.name;
-                        $servicelocation_addressstreet = servicelocations.addressstreet;
-                        $servicelocation_addresscity = servicelocations.addresscity;
-                        $servicelocation_addressstate = servicelocations.addressstate;
-                        $servicelocation_addresszip = servicelocations.addresszip;
-                        $servicelocation_telephone = servicelocations.telephone;
-                        $servicelocation_service_name = servicelocations.servicename;
-                                        
-                        //echo "Location Name: " . $servicelocation_name . "<br />";
-                        //echo "Location Address: " . $servicelocation_addressstreet . "<br />";
-                        //echo "Location City: " . $servicelocation_addresscity . "<br />";
-                        //echo "Location State: " . $servicelocation_addressstate . "<br />";
-                        //echo "Location Zip: " . $servicelocation_addresszip . "<br />";
-                                                
-                        if ($servicelocation_service_name.indexOf($servicename) !=-1) { 
-                                
-                            $ServiceLocation = {};
-                            $ServiceLocation["@type"] = "CivicStructure";   
-                            $ServiceLocation["name"] = $servicelocation_name;
-                            
-                            $ServiceLocationAddress = {};
-                            $ServiceLocationAddress["streetAddress"] = $servicelocation_addressstreet;
-                            $ServiceLocationAddress["addressLocality"] = $servicelocation_addresscity;
-                            $ServiceLocationAddress["addressRegion"] = $servicelocation_addressstate;
-                            $ServiceLocationAddress["postalCode"] = $servicelocation_addresszip;        
-                            $ServiceLocationAddress["telephone"] = $servicelocation_telephone;
-                                
-                            $ServiceLocation['address'] = $ServiceLocationAddress;      
-                            SServiceChannel['serviceLocation'].push($ServiceLocation);  
+                  var public_spreadsheet_url = url;
             
-                            }
-                    })
+                  $(document).ready( function() {
+                    Tabletop.init( { key: public_spreadsheet_url,
+                                     callback: showInfo,
+                                     wanted: [ "Services", "Service Locations" ],
+                                     debug: true } )
+                  })
                     
-                    $Schema['serviceChannel'] = SServiceChannel;            
+                  function showInfo(data, tabletop) {
+                    $("#table_info").text("We found the tables " + tabletop.model_names.join(", "));
+            
+                    $.each( tabletop.sheets(), function(i, sheet) {
+                      $("#table_info").append("<p>" + sheet.name + " has " + sheet.column_names.join(", ") + "</p>");
+                    });
+                    
+                    $.each( tabletop.sheets("Services").all(), function(i, service) {
                         
-                    // ServiceType
-                    SServiceType = {};
-                    SServiceType["@type"] = "ServiceType";
-                    SServiceType['name'] = $servicetype;            
-                    SServiceType['serviceTaxonomy'] = $servicetypetaxonomyused; 
+                        $servicename = service.servicename;
+                        $uniqueid = service.uniqueid;
+                        $description = service.description;
+                        $url = service.url;
+                        $image = service.image;
+                        $alternatenames = service.alternatenames;
+                        $servicearea = service.servicearea;
+                        $providername = service.providername;
+                        $providerlogo = service.providerlogo;
+                        $providerurl = service.providerurl;
+                        $operator = service.operator;
+                        $servicetype = service.servicetype;
+                        $servicetypetaxonomyused = service.servicetypetaxonomyused;
+                        $produces = service.produces;
+                        $audience = service.audience;
+                        $availablelanguages = service.availablelanguages;
+                        $serviceurl = service.serviceurl;
+                        $servicephone = service.servicephone;   
+                        
+                        // Let's buil the Schema
+                        $Schema = {};
+                        $Schema['@context'] = 'http://schema.org/';
+                        $Schema['@type'] = 'GovernmentService';
+                        $Schema['@id'] = $uniqueid;
+                        $Schema['name'] = $servicename;                 
+                        
+                        // Audience
+                        $audienceArray = $audience.split(";");
+                        $Audience = {};
+                        $Audience["@type"] = "CivicAudience";
+                        $Audience['audienceType'] = new Array();
+                        $.each($audienceArray, function( key, value ){
+                            $Audience['audienceType'].push(value);  
+                        })
+                                    
+                        $Schema['audience'] = $Audience;        
                     
-                    $Schema['serviceType'] = SServiceType;          
+                        $Schema['Description'] = $description;
                     
-                    jsonStr = JSON.stringify($Schema);
-                    document.getElementById('showjson').value = jsonStr;
-                    //alert(mydump($Schema));
-                })        
+                        $Provider = {};
+                        $Provider["@type"] = "GovernmentOrganization";
+                        $Provider["name"] = $providername;
+                        $Provider["url"] = $providerurl;
+                        $Provider["logo"] = $providerlogo;
+                        
+                        $Schema['provider'] = $Provider;        
+                        
+                        $ServiceArea = {};
+                        $ServiceArea["@type"] = "Country";
+                        $ServiceArea["name"] = "ocd-division/country:us";   
+                                        
+                        $Schema['serviceArea'] = $ServiceArea;          
+            
+                        SServiceChannel = {};
+                        SServiceChannel["@type"] = "ServiceChannel";
+                        SServiceChannel["servicePhone"] = $servicephone;    
+                        SServiceChannel["serviceLocation"] = new Array();
+            
+                        $.each(tabletop.sheets("Service Locations").all(), function(i, servicelocations) {
+                            
+                            $servicelocation_name = servicelocations.name;
+                            $servicelocation_addressstreet = servicelocations.addressstreet;
+                            $servicelocation_addresscity = servicelocations.addresscity;
+                            $servicelocation_addressstate = servicelocations.addressstate;
+                            $servicelocation_addresszip = servicelocations.addresszip;
+                            $servicelocation_telephone = servicelocations.telephone;
+                            $servicelocation_service_name = servicelocations.servicename;
+                                            
+                            //echo "Location Name: " . $servicelocation_name . "<br />";
+                            //echo "Location Address: " . $servicelocation_addressstreet . "<br />";
+                            //echo "Location City: " . $servicelocation_addresscity . "<br />";
+                            //echo "Location State: " . $servicelocation_addressstate . "<br />";
+                            //echo "Location Zip: " . $servicelocation_addresszip . "<br />";
+                                                    
+                            if ($servicelocation_service_name.indexOf($servicename) !=-1) { 
+                                    
+                                $ServiceLocation = {};
+                                $ServiceLocation["@type"] = "CivicStructure";   
+                                $ServiceLocation["name"] = $servicelocation_name;
+                                
+                                $ServiceLocationAddress = {};
+                                $ServiceLocationAddress["streetAddress"] = $servicelocation_addressstreet;
+                                $ServiceLocationAddress["addressLocality"] = $servicelocation_addresscity;
+                                $ServiceLocationAddress["addressRegion"] = $servicelocation_addressstate;
+                                $ServiceLocationAddress["postalCode"] = $servicelocation_addresszip;        
+                                $ServiceLocationAddress["telephone"] = $servicelocation_telephone;
+                                    
+                                $ServiceLocation['address'] = $ServiceLocationAddress;      
+                                SServiceChannel['serviceLocation'].push($ServiceLocation);  
                 
-              }
-        
-              document.write("The published spreadsheet is located at <a target='_new' href='" + public_spreadsheet_url + "'>" + public_spreadsheet_url + "</a>");    
+                                }
+                        })
+                        
+                        $Schema['serviceChannel'] = SServiceChannel;            
+                            
+                        // ServiceType
+                        SServiceType = {};
+                        SServiceType["@type"] = "ServiceType";
+                        SServiceType['name'] = $servicetype;            
+                        SServiceType['serviceTaxonomy'] = $servicetypetaxonomyused; 
+                        
+                        $Schema['serviceType'] = SServiceType;          
+                       
+                        jsonStr = JSON.stringify($Schema);
+                        
+                        jsonStr = JSON.stringify(JSON.parse(jsonStr),null,2);  
+                       
+                        document.getElementById('showjson').value = jsonStr;
+                        //alert(mydump($Schema));
+                    })        
+                    
+                  }
+                  
+                 }
             </script>
             
             <textarea cols="130" rows="30" id="showjson" style="margin-left: 25px;" /></textarea><br />        
