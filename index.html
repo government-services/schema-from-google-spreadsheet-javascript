@@ -36,6 +36,22 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         
+        <h1>Government Services Schema</h1>
+        <p>This is a basic tool that pulls from a Google Spreadsheet that is setup as a government services template, allowing the editing of groups of services to renders as JSON output.</p>
+        <form action="index.php" method="get">
+            <strong>Google Doc ID:</strong> <input type="text" name="sk" value="<?php echo $spreadsheetkey; ?>" size="75" />
+            <input type="submit" name="changekey" value="Change Key" />
+        </form>
+        <p>By default this tool uses <a href="https://docs.google.com/spreadsheet/ccc?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE&usp=sharing" target="_blank">this spreadsheet</a>, but you can copy the template and populate with different data, publish publicy, and use the key to generate new JSON output.</p>
+       
+        <p><strong>Dependencies:</strong></p>
+        <ul>
+            <li><a href="https://github.com/jsoma/tabletop" target="_blank">Tabletop</a></li>
+            <li><a href="http://jquery.com/" target="_blank">Jquery</a></li>   
+        </ul>           
+       
+        <p>This project is meant to provide an easily forkable project that any federal, state, county or city government can use to generate service listings in a Google Doc and then output as JSON, just by using a Github repo and no server side code.</p>
+        
         <script type="text/javascript">
                     
               var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE&output=html';
