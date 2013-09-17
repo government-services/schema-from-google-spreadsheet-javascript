@@ -49,12 +49,13 @@
         
         <h1>Government Services Schema</h1>
         <p>This is a basic tool that pulls from a Google Spreadsheet that is setup as a government services template, allowing the editing of groups of services to renders as JSON output.</p>
+        <p>By default this tool uses <a href="https://docs.google.com/spreadsheet/ccc?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE#gid=0" target="_blank">this spreadsheet</a>, you can make a copy of the template and populate with different data, publish publicy, and copy the URL in the textbox below to generate new JSON output.</p>
+              
         <form action="index.php" method="get">
             <strong>Google Doc ID:</strong> <input type="text" name="googleurl" id="googleurl" value="https://docs.google.com/spreadsheet/pub?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE&output=html" size="75" />
             <input type="button" onclick="runGenerator();" name="changekey" value="Run" />
         </form>
-        <p>By default this tool uses <a href="https://docs.google.com/spreadsheet/ccc?key=0AmRmiTou7vbjdGZEaUdpV2lMNTRwZG5GMTdfWWRMUUE#gid=0" target="_blank">this spreadsheet</a>, but you can copy the template and populate with different data, publish publicy, and use the key to generate new JSON output.</p>
-       
+        
         <p><strong>Dependencies:</strong></p>
         <ul>
             <li><a href="https://github.com/jsoma/tabletop" target="_blank">Tabletop</a></li>
