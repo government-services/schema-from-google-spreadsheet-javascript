@@ -7,7 +7,7 @@ Here is the working spreadsheet - [https://docs.google.com/spreadsheet/ccc?key=0
 
 Here is the working site, which all runs on Github, so you can fork and run in your own Github account with no server backend - [http://kinlane.github.io/government-services-schema-from-google-spreadsheet-in-javascript/](http://kinlane.github.io/government-services-schema-from-google-spreadsheet-in-javascript/)
 
-Here is an overview of Representing Government Services with JSON-LD - [https://s3.amazonaws.com/kinlane-productions/federal-government/government-services/RepresentingGovernmentServiceswithJSON-LD.pdf}(https://s3.amazonaws.com/kinlane-productions/federal-government/government-services/RepresentingGovernmentServiceswithJSON-LD.pdf)
+Here is an overview of Representing Government Services with JSON-LD - [https://s3.amazonaws.com/kinlane-productions/federal-government/government-services/RepresentingGovernmentServiceswithJSON-LD.pdf](https://s3.amazonaws.com/kinlane-productions/federal-government/government-services/RepresentingGovernmentServiceswithJSON-LD.pdf)
 
 Here is the schema draft - [http://www.w3.org/wiki/images/0/03/Services_for_schema.org_%28DRAFT_2013-06-27%29.pdf](http://www.w3.org/wiki/images/0/03/Services_for_schema.org_%28DRAFT_2013-06-27%29.pdf)
 
